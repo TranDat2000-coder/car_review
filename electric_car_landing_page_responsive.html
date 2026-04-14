@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #050810;
+    --surface: #0c1220;
+    --accent: #00e5ff;
+    --accent2: #7c3aed;
+    --text: #e8edf5;
+    --muted: #6b7a99;
+    --card-bg: rgba(12,18,32,0.9);
+    --radius: 12px;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 48px;
+    background: rgba(5,8,16,0.8);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(0,229,255,0.08);
+  }
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px; letter-spacing: 4px;
+    color: var(--accent);
+    text-shadow: 0 0 20px rgba(0,229,255,0.4);
+  }
+  .logo span { color: var(--text); }
+
+  .nav-links {
+    display: flex; gap: 32px; list-style: none;
+  }
+  .nav-links a {
+    color: var(--muted); text-decoration: none;
+    font-size: 13px; letter-spacing: 1px; font-weight: 500;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  .nav-right { display: flex; align-items: center; gap: 16px; }
+  .nav-btn {
+    background: var(--accent); color: var(--bg);
+    border: none; padding: 9px 22px; border-radius: 4px;
+    font-family: 'Outfit', sans-serif; font-weight: 700;
+    font-size: 12px; letter-spacing: 1px; cursor: pointer;
+    transition: all 0.3s; white-space: nowrap;
+  }
+  .nav-btn:hover { background: #fff; }
+
+  /* Hamburger */
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; padding: 4px;
+  }
+  .hamburger span {
+    display: block; width: 24px; height: 2px;
+    background: var(--text); border-radius: 2px;
+    transition: all 0.3s;
+  }
+
+  /* Mobile menu */
+  .mobile-menu {
+    display: none;
+    position: fixed; top: 57px; left: 0; right: 0; z-index: 99;
+    background: rgba(5,8,16,0.97);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0,229,255,0.1);
+    padding: 20px 24px 28px;
+    flex-direction: column; gap: 4px;
+    transform: translateY(-110%);
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+  .mobile-menu.open { transform: translateY(0); display: flex; }
+  .mobile-menu a {
+    color: var(--muted); text-decoration: none;
+    font-size: 15px; font-weight: 500; letter-spacing: 1px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: color 0.3s;
+  }
+  .mobile-menu a:last-child { border-bottom: none; }
+  .mobile-menu a:hover { color: var(--accent); }
+  .mobile-menu .nav-btn-mobile {
+    margin-top: 12px; background: var(--accent); color: var(--bg);
+    border: none; padding: 14px; border-radius: 6px;
+    font-family: 'Outfit', sans-serif; font-weight: 700;
+    font-size: 13px; letter-spacing: 1.5px; cursor: pointer;
+    text-transform: uppercase; width: 100%;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    position: relative; overflow: hidden;
+    padding: 120px 48px 60px;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 55% at 75% 40%, rgba(124,58,237,0.2) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 15% 85%, rgba(0,229,255,0.1) 0%, transparent 60%);
+  }
+
+  .grid-lines {
+    position: absolute; inset: 0; opacity: 0.06;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.5) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.5) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: gridMove 20s linear infinite;
+  }
+  @keyframes gridMove {
+    0% { transform: perspective(500px) rotateX(28deg) translateY(0); }
+    100% { transform: perspective(500px) rotateX(28deg) translateY(50px); }
+  }
+
+  .orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px); pointer-events: none;
+    animation: pulse 6s ease-in-out infinite alternate;
+  }
+  .orb1 { width: 450px; height: 450px; background: var(--accent2); opacity: 0.22; top: -80px; right: -80px; }
+  .orb2 { width: 280px; height: 280px; background: var(--accent); opacity: 0.18; bottom: 0; left: 5%; animation-delay: -3s; }
+  @keyframes pulse { 0% { opacity: 0.15; transform: scale(1); } 100% { opacity: 0.3; transform: scale(1.1); } }
+
+  .hero-inner {
+    position: relative; z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px; align-items: center;
+    max-width: 1200px; margin: 0 auto; width: 100%;
+  }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    border: 1px solid rgba(0,229,255,0.3);
+    padding: 5px 14px; border-radius: 100px;
+    font-size: 11px; letter-spacing: 2px; color: var(--accent);
+    margin-bottom: 24px; text-transform: uppercase;
+    background: rgba(0,229,255,0.05);
+    animation: fadeUp 0.8s ease both;
+  }
+  .badge-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent); animation: blink 1.5s ease infinite;
+  }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 6vw, 100px);
+    line-height: 0.92; letter-spacing: 2px;
+    margin-bottom: 20px;
+    animation: fadeUp 0.8s ease 0.15s both;
+  }
+  h1 .line2 { color: var(--accent); display: block; }
+  h1 .line3 {
+    display: block;
+    -webkit-text-stroke: 1px rgba(232,237,245,0.25);
+    color: transparent;
+  }
+
+  .hero-desc {
+    font-size: 15px; color: var(--muted); line-height: 1.7;
+    margin-bottom: 36px; max-width: 420px;
+    animation: fadeUp 0.8s ease 0.3s both;
+  }
+
+  .hero-actions {
+    display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+    animation: fadeUp 0.8s ease 0.45s both;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), #0099cc);
+    color: var(--bg); border: none;
+    padding: 14px 32px; border-radius: 4px;
+    font-family: 'Outfit', sans-serif; font-weight: 700;
+    font-size: 13px; letter-spacing: 1.5px;
+    cursor: pointer; transition: all 0.3s; text-transform: uppercase;
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::before {
+    content: ''; position: absolute; top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
+  }
+  .btn-primary:hover::before { left: 100%; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,229,255,0.4); }
+
+  .btn-secondary {
+    background: transparent; color: var(--text);
+    border: 1px solid rgba(232,237,245,0.2);
+    padding: 14px 32px; border-radius: 4px;
+    font-family: 'Outfit', sans-serif; font-weight: 500;
+    font-size: 13px; letter-spacing: 1px;
+    cursor: pointer; transition: all 0.3s; text-transform: uppercase;
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Car SVG side */
+  .hero-car {
+    display: flex; justify-content: center; align-items: center;
+    animation: floatCar 4s ease-in-out infinite alternate;
+  }
+  @keyframes floatCar {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-16px); }
+  }
+  .hero-car svg { width: 100%; max-width: 500px; filter: drop-shadow(0 20px 40px rgba(0,229,255,0.15)); }
+
+  /* ===== STATS ===== */
+  .stats-bar {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid rgba(0,229,255,0.1);
+    border-bottom: 1px solid rgba(0,229,255,0.1);
+    background: rgba(12,18,32,0.7); backdrop-filter: blur(20px);
+  }
+  .stat-item {
+    padding: 24px 32px;
+    border-right: 1px solid rgba(0,229,255,0.08);
+    transition: background 0.3s;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-item:hover { background: rgba(0,229,255,0.04); }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px; color: var(--accent);
+    letter-spacing: 2px; line-height: 1;
+    text-shadow: 0 0 20px rgba(0,229,255,0.3);
+  }
+  .stat-num small { font-size: 22px; }
+  .stat-label { font-size: 11px; color: var(--muted); letter-spacing: 2px; margin-top: 4px; text-transform: uppercase; }
+
+  /* ===== SECTIONS ===== */
+  .section { padding: 80px 48px; max-width: 1300px; margin: 0 auto; }
+  .section-full { padding: 80px 48px; }
+
+  .section-tag {
+    font-size: 11px; letter-spacing: 4px; color: var(--accent);
+    text-transform: uppercase; margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 4.5vw, 58px);
+    line-height: 1; letter-spacing: 2px; margin-bottom: 48px;
+  }
+  .section-title em { color: var(--accent); font-style: normal; }
+
+  /* ===== MODELS ===== */
+  .models-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .model-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(0,229,255,0.08);
+    border-radius: var(--radius); overflow: hidden;
+    transition: all 0.4s; cursor: pointer;
+  }
+  .model-card:hover {
+    border-color: rgba(0,229,255,0.35);
+    transform: translateY(-5px);
+    box-shadow: 0 16px 50px rgba(0,0,0,0.5), 0 0 30px rgba(0,229,255,0.08);
+  }
+  .model-card.featured { grid-column: span 2; }
+  .model-card.featured:hover { border-color: rgba(124,58,237,0.6); box-shadow: 0 16px 50px rgba(0,0,0,0.5), 0 0 30px rgba(124,58,237,0.12); }
+
+  .model-img {
+    width: 100%; aspect-ratio: 16/9;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .model-card.featured .model-img { aspect-ratio: 21/9; }
+  .model-img-inner { font-size: 72px; }
+  .model-card.featured .model-img-inner { font-size: 110px; }
+
+  .model-bg1 { background: linear-gradient(135deg, #0a1628, #0d2040); }
+  .model-bg2 { background: linear-gradient(135deg, #120a28, #1e0d40); }
+  .model-bg3 { background: linear-gradient(135deg, #0a1a14, #0d2818); }
+  .model-bg4 { background: linear-gradient(135deg, #1a1010, #2d1505); }
+
+  .model-glow {
+    position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 70%; height: 18px; border-radius: 50%; filter: blur(12px);
+  }
+  .model-bg1 .model-glow { background: rgba(0,229,255,0.5); }
+  .model-bg2 .model-glow { background: rgba(124,58,237,0.5); }
+  .model-bg3 .model-glow { background: rgba(0,255,150,0.5); }
+  .model-bg4 .model-glow { background: rgba(255,120,50,0.5); }
+
+  .model-info { padding: 20px; }
+  .model-badge {
+    font-size: 10px; letter-spacing: 2px; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 100px; margin-bottom: 10px; display: inline-block;
+  }
+  .badge-new { background: rgba(0,229,255,0.1); color: var(--accent); border: 1px solid rgba(0,229,255,0.3); }
+  .badge-hot { background: rgba(124,58,237,0.15); color: #a78bfa; border: 1px solid rgba(124,58,237,0.3); }
+  .badge-eco { background: rgba(0,200,100,0.1); color: #34d399; border: 1px solid rgba(0,200,100,0.3); }
+  .badge-sport { background: rgba(255,120,50,0.1); color: #fb923c; border: 1px solid rgba(255,120,50,0.3); }
+
+  .model-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px; letter-spacing: 2px; margin-bottom: 4px;
+  }
+  .model-sub { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+
+  .model-specs {
+    display: flex; gap: 16px; margin-bottom: 16px;
+    padding-top: 16px; border-top: 1px solid rgba(232,237,245,0.06);
+    flex-wrap: wrap;
+  }
+  .spec { display: flex; flex-direction: column; gap: 2px; }
+  .spec-val { font-weight: 600; font-size: 14px; }
+  .spec-key { font-size: 10px; color: var(--muted); letter-spacing: 1px; }
+
+  .model-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+  .price { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px; }
+  .price span { font-size: 11px; font-family: 'Outfit', sans-serif; color: var(--muted); font-weight: 400; }
+
+  .card-btn {
+    background: rgba(0,229,255,0.08);
+    color: var(--accent); border: 1px solid rgba(0,229,255,0.2);
+    padding: 7px 18px; border-radius: 4px;
+    font-family: 'Outfit', sans-serif; font-size: 11px;
+    letter-spacing: 1px; cursor: pointer;
+    transition: all 0.3s; text-transform: uppercase; font-weight: 600;
+    white-space: nowrap;
+  }
+  .card-btn:hover { background: var(--accent); color: var(--bg); }
+
+  /* ===== FEATURES ===== */
+  .features-section { padding: 80px 48px; background: rgba(8,12,22,0.6); }
+  .features-inner { max-width: 1300px; margin: 0 auto; }
+
+  .features-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 2px; border: 1px solid rgba(0,229,255,0.08);
+    border-radius: 16px; overflow: hidden;
+  }
+  .feature-item {
+    padding: 40px; background: var(--card-bg);
+    transition: background 0.3s; cursor: default; position: relative; overflow: hidden;
+  }
+  .feature-item::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .feature-item:hover::before { opacity: 1; }
+  .feature-item:hover { background: rgba(0,229,255,0.03); }
+  .feature-icon { font-size: 36px; margin-bottom: 20px; display: block; }
+  .feature-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px; letter-spacing: 2px; margin-bottom: 10px;
+  }
+  .feature-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+  /* ===== CHARGING ===== */
+  .charging-section {
+    padding: 80px 48px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; align-items: center;
+    max-width: 1300px; margin: 0 auto;
+  }
+  .charge-visual {
+    background: var(--card-bg);
+    border: 1px solid rgba(0,229,255,0.1);
+    border-radius: 16px; padding: 40px; text-align: center;
+  }
+  .charge-circle {
+    width: 180px; height: 180px; border-radius: 50%;
+    border: 3px solid rgba(0,229,255,0.12);
+    margin: 0 auto 24px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .charge-circle::before {
+    content: ''; position: absolute; inset: -3px; border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: var(--accent); border-right-color: var(--accent);
+    animation: spin 3s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .charge-pct {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px; color: var(--accent);
+    letter-spacing: 2px; line-height: 1;
+    text-shadow: 0 0 30px rgba(0,229,255,0.5);
+  }
+  .charge-pct small { font-size: 24px; }
+  .charge-status { color: var(--muted); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; }
+  .charge-bars { display: flex; gap: 4px; margin-top: 20px; justify-content: center; }
+  .charge-bar { width: 18px; height: 7px; border-radius: 4px; background: rgba(0,229,255,0.12); }
+  .charge-bar.active { background: var(--accent); box-shadow: 0 0 6px rgba(0,229,255,0.5); }
+
+  .charge-list { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-top: 28px; }
+  .charge-list li {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 14px; border-radius: 8px;
+    border: 1px solid rgba(0,229,255,0.06); transition: border-color 0.3s;
+  }
+  .charge-list li:hover { border-color: rgba(0,229,255,0.2); }
+  .charge-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .charge-text strong { font-size: 13px; display: block; margin-bottom: 2px; }
+  .charge-text span { font-size: 11px; color: var(--muted); }
+
+  /* ===== CTA ===== */
+  .cta-wrapper { padding: 0 48px 80px; }
+  .cta {
+    padding: 60px 56px;
+    background: linear-gradient(135deg, rgba(0,229,255,0.05), rgba(124,58,237,0.1));
+    border: 1px solid rgba(0,229,255,0.15);
+    border-radius: 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 32px; position: relative; overflow: hidden;
+  }
+  .cta::before {
+    content: ''; position: absolute;
+    top: -80px; right: -80px; width: 350px; height: 350px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(124,58,237,0.2), transparent 70%);
+    pointer-events: none;
+  }
+  .cta-text { position: relative; z-index: 1; }
+  .cta-text h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(28px, 3.5vw, 48px); letter-spacing: 2px; margin-bottom: 8px;
+  }
+  .cta-text p { color: var(--muted); font-size: 14px; }
+  .cta-actions { display: flex; gap: 12px; flex-shrink: 0; position: relative; z-index: 1; }
+
+  /* ===== FOOTER ===== */
+  footer {
+    padding: 40px 48px;
+    border-top: 1px solid rgba(0,229,255,0.08);
+    display: flex; align-items: center; justify-content: space-between;
+    color: var(--muted); font-size: 12px; gap: 16px; flex-wrap: wrap;
+  }
+  .footer-links { display: flex; gap: 20px; }
+  .footer-links a {
+    color: var(--muted); text-decoration: none; font-size: 12px;
+    transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--accent); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ============================================================
+     RESPONSIVE — TABLET (≤ 900px)
+  ============================================================ */
+  @media (max-width: 900px) {
+    nav { padding: 14px 24px; }
+    .nav-links { display: none; }
+    .nav-btn { display: none; }
+    .hamburger { display: flex; }
+
+    .hero { padding: 90px 24px 50px; }
+    .hero-inner { grid-template-columns: 1fr; gap: 32px; }
+    .hero-car { order: -1; }
+    .hero-car svg { max-width: 380px; }
+    h1 { font-size: clamp(48px, 10vw, 72px); }
+
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .stat-item { border-right: none; border-bottom: 1px solid rgba(0,229,255,0.08); }
+    .stat-item:nth-child(odd) { border-right: 1px solid rgba(0,229,255,0.08); }
+    .stat-item:nth-child(3), .stat-item:nth-child(4) { border-bottom: none; }
+    .stat-item { padding: 20px 24px; }
+
+    .section { padding: 60px 24px; }
+    .section-full { padding: 60px 24px; }
+    .features-section { padding: 60px 24px; }
+
+    .models-grid { grid-template-columns: 1fr 1fr; }
+    .model-card.featured { grid-column: span 2; }
+
+    .features-grid { grid-template-columns: 1fr; }
+
+    .charging-section { padding: 60px 24px; grid-template-columns: 1fr; gap: 40px; }
+
+    .cta-wrapper { padding: 0 24px 60px; }
+    .cta { padding: 40px 32px; flex-direction: column; align-items: flex-start; }
+    .cta-actions { width: 100%; }
+    .cta-actions button { flex: 1; text-align: center; }
+
+    footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; gap: 12px; }
+  }
+
+  /* ============================================================
+     RESPONSIVE — MOBILE (≤ 600px)
+  ============================================================ */
+  @media (max-width: 600px) {
+    nav { padding: 12px 18px; }
+
+    .hero { padding: 80px 18px 40px; min-height: auto; }
+    .hero-inner { gap: 24px; }
+    .hero-car svg { max-width: 300px; }
+    h1 { font-size: clamp(40px, 12vw, 60px); margin-bottom: 14px; }
+    .hero-desc { font-size: 14px; margin-bottom: 28px; }
+    .hero-actions { flex-direction: column; width: 100%; }
+    .btn-primary, .btn-secondary { width: 100%; text-align: center; padding: 15px; }
+    .badge { font-size: 10px; }
+
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .stat-num { font-size: 34px; }
+    .stat-num small { font-size: 18px; }
+    .stat-label { font-size: 10px; }
+    .stat-item { padding: 16px 18px; }
+
+    .section { padding: 50px 18px; }
+    .section-full { padding: 50px 18px; }
+    .features-section { padding: 50px 18px; }
+    .section-title { font-size: clamp(30px, 8vw, 44px); margin-bottom: 32px; }
+
+    .models-grid { grid-template-columns: 1fr; gap: 14px; }
+    .model-card.featured { grid-column: span 1; }
+    .model-card.featured .model-img { aspect-ratio: 16/9; }
+    .model-card.featured .model-img-inner { font-size: 72px; }
+    .model-specs { gap: 12px; }
+
+    .features-grid { border-radius: 12px; }
+    .feature-item { padding: 28px 22px; }
+    .feature-icon { font-size: 30px; margin-bottom: 14px; }
+    .feature-title { font-size: 18px; }
+
+    .charging-section { padding: 50px 18px; }
+    .charge-circle { width: 150px; height: 150px; }
+    .charge-pct { font-size: 52px; }
+
+    .cta-wrapper { padding: 0 18px 50px; }
+    .cta { padding: 32px 24px; gap: 24px; border-radius: 14px; }
+    .cta-actions { flex-direction: column; }
+    .cta-actions button { width: 100%; text-align: center; }
+
+    footer { padding: 28px 18px; }
+    .footer-links { flex-wrap: wrap; gap: 12px; }
+  }
+
+  /* ============================================================
+     RESPONSIVE — TINY (≤ 380px)
+  ============================================================ */
+  @media (max-width: 380px) {
+    h1 { font-size: 36px; }
+    .stat-item { padding: 14px 14px; }
+    .stat-num { font-size: 28px; }
+    .feature-item { padding: 22px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">VOLT<span>EX</span></div>
+  <ul class="nav-links">
+    <li><a href="#">Dòng xe</a></li>
+    <li><a href="#">Công nghệ</a></li>
+    <li><a href="#">Sạc điện</a></li>
+    <li><a href="#">Đại lý</a></li>
+    <li><a href="#">Về chúng tôi</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="nav-btn">Đặt lái thử</button>
+    <div class="hamburger" onclick="toggleMenu(this)">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#">Dòng xe</a>
+  <a href="#">Công nghệ</a>
+  <a href="#">Sạc điện</a>
+  <a href="#">Đại lý</a>
+  <a href="#">Về chúng tôi</a>
+  <button class="nav-btn-mobile">Đặt lái thử ngay</button>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="grid-lines"></div>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="badge"><div class="badge-dot"></div>Thế hệ EV mới — 2026</div>
+      <h1>TƯƠNG LAI<br><span class="line2">ĐIỆN KHÍ</span><span class="line3">HÓA</span></h1>
+      <p class="hero-desc">Trải nghiệm tốc độ, hiệu suất và phong cách trong kỷ nguyên điện. Mỗi chuyến đi là một hành trình không phát thải.</p>
+      <div class="hero-actions">
+        <button class="btn-primary">Khám phá ngay</button>
+        <button class="btn-secondary">Xem video ▶</button>
+      </div>
+    </div>
+
+    <div class="hero-car">
+      <svg viewBox="0 0 700 320" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="bodyG" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#1a2d4a"/>
+            <stop offset="60%" stop-color="#0d1f35"/>
+            <stop offset="100%" stop-color="#061020"/>
+          </linearGradient>
+          <linearGradient id="roofG" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#1e3555"/>
+            <stop offset="100%" stop-color="#0a1828"/>
+          </linearGradient>
+          <linearGradient id="glassG" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="rgba(0,229,255,0.4)"/>
+            <stop offset="100%" stop-color="rgba(0,100,180,0.15)"/>
+          </linearGradient>
+          <radialGradient id="wGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="rgba(0,229,255,0.5)"/>
+            <stop offset="100%" stop-color="transparent"/>
+          </radialGradient>
+          <filter id="glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <filter id="sglow"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+
+        <!-- Shadow -->
+        <ellipse cx="350" cy="290" rx="280" ry="14" fill="rgba(0,229,255,0.07)" filter="url(#sglow)"/>
+        <ellipse cx="350" cy="290" rx="170" ry="8" fill="rgba(0,229,255,0.1)"/>
+
+        <!-- Body -->
+        <path d="M75 225 Q70 190 85 165 L155 148 Q190 105 250 92 L375 86 Q465 86 510 102 L575 132 Q610 145 618 165 L625 225 Z" fill="url(#bodyG)" stroke="rgba(0,229,255,0.12)" stroke-width="1"/>
+
+        <!-- Roof -->
+        <path d="M220 148 Q228 110 262 96 L378 88 Q458 88 488 104 L518 132 Q500 142 388 145 Z" fill="url(#roofG)" stroke="rgba(0,229,255,0.08)" stroke-width="1"/>
+
+        <!-- Windshield -->
+        <path d="M228 145 Q235 110 265 96 L375 89 Q390 89 394 95 L398 145 Z" fill="url(#glassG)" opacity="0.85"/>
+
+        <!-- Rear window -->
+        <path d="M398 145 L404 96 Q440 96 480 109 L514 132 L510 145 Z" fill="url(#glassG)" opacity="0.6"/>
+
+        <!-- Door handles -->
+        <rect x="230" y="188" width="44" height="5" rx="2.5" fill="rgba(0,229,255,0.45)" filter="url(#glow)"/>
+        <rect x="380" y="188" width="44" height="5" rx="2.5" fill="rgba(0,229,255,0.45)" filter="url(#glow)"/>
+
+        <!-- Front DRL -->
+        <path d="M82 168 Q78 174 78 182 L83 182" stroke="rgba(0,229,255,0.85)" stroke-width="2.5" fill="none" stroke-linecap="round" filter="url(#glow)"/>
+        <path d="M82 168 L148 160" stroke="rgba(0,229,255,0.45)" stroke-width="2" fill="none" filter="url(#glow)"/>
+
+        <!-- Rear light -->
+        <path d="M610 168 Q618 176 618 183 L610 183" stroke="#ff3366" stroke-width="2.5" fill="none" stroke-linecap="round" filter="url(#glow)"/>
+        <path d="M610 168 L545 160" stroke="rgba(255,50,100,0.35)" stroke-width="1.5" fill="none"/>
+
+        <!-- Side accent -->
+        <path d="M92 200 Q175 195 515 200 Q565 202 605 207" stroke="rgba(0,229,255,0.22)" stroke-width="1.2" fill="none"/>
+
+        <!-- Charging port -->
+        <rect x="600" y="172" width="10" height="16" rx="2.5" fill="rgba(0,229,255,0.08)" stroke="rgba(0,229,255,0.4)" stroke-width="1"/>
+        <rect x="603" y="176" width="5" height="8" rx="1" fill="rgba(0,229,255,0.65)" filter="url(#glow)"/>
+
+        <!-- Wheel arches -->
+        <path d="M82 225 Q82 248 165 251 Q245 253 245 225 Z" fill="rgba(0,0,0,0.4)" stroke="rgba(0,229,255,0.1)" stroke-width="1"/>
+        <path d="M432 225 Q432 248 515 251 Q598 253 598 225 Z" fill="rgba(0,0,0,0.4)" stroke="rgba(0,229,255,0.1)" stroke-width="1"/>
+
+        <!-- Front wheel -->
+        <circle cx="165" cy="251" r="40" fill="#0a0e18" stroke="rgba(0,229,255,0.2)" stroke-width="1.5"/>
+        <circle cx="165" cy="251" r="40" fill="url(#wGlow)" opacity="0.3"/>
+        <circle cx="165" cy="251" r="26" fill="#06090f" stroke="rgba(0,229,255,0.12)" stroke-width="1.5"/>
+        <circle cx="165" cy="251" r="10" fill="rgba(0,229,255,0.25)" stroke="rgba(0,229,255,0.6)" stroke-width="1.5" filter="url(#glow)"/>
+        <line x1="165" y1="225" x2="165" y2="232" stroke="rgba(0,229,255,0.4)" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="165" y1="270" x2="165" y2="277" stroke="rgba(0,229,255,0.4)" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="139" y1="251" x2="146" y2="251" stroke="rgba(0,229,255,0.4)" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="184" y1="251" x2="191" y2="251" stroke="rgba(0,229,255,0.4)" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="146" y1="232" x2="151" y2="237" stroke="rgba(0,229,255,0.4)" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="179" y1="265" x2="184" y2="270" stroke="rgba(0,229,255,0.4)" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="184" y1="232" x2="179" y2="237" stroke="rgba(0,229,255,0.4)" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="146" y1="265" x2="151" y2="270" stroke="rgba(0,229,255,0.4)" stroke-width="2.5" stroke-linecap="round"/>
+
+        <!-- Rear wheel -->
+        <circle cx="515" cy="251" r="40" fill="#0a0e18" stroke="rgba(0,229,255,0.2)" stroke-width="1.5"/>
+        <circle cx="515" cy="251" r="40" fill="url(#wGlow)" opacity="0.3"/>
+        <circle cx="515" cy="251" r="26" fill="#06090f" stroke="rgba(0,229,255,0.12)" stroke-width="1.5"/>
+        <circle cx="515" cy="251" r="10" fill="rgba(0,229,255,0.25)" stroke="rgba(0,229,255,0.6)" stroke-width="1.5" filter="url(#glow)"/>
+        <line x1="515" y1="225" x2="515" y2="232" stroke="rgba(0,229,255,0.4)" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="515" y1="270" x2="515" y2="277" stroke="rgba(0,229,255,0.4)" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="489" y1="251" x2="496" y2="251" stroke="rgba(0,229,255,0.4)" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="534" y1="251" x2="541" y2="251" stroke="rgba(0,229,255,0.4)" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="496" y1="232" x2="501" y2="237" stroke="rgba(0,229,255,0.4)" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="529" y1="265" x2="534" y2="270" stroke="rgba(0,229,255,0.4)" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="534" y1="232" x2="529" y2="237" stroke="rgba(0,229,255,0.4)" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="496" y1="265" x2="501" y2="270" stroke="rgba(0,229,255,0.4)" stroke-width="2.5" stroke-linecap="round"/>
+
+        <!-- Battery glow -->
+        <path d="M140 225 L545 225 L545 231 L140 231 Z" fill="rgba(0,229,255,0.04)" stroke="rgba(0,229,255,0.08)" stroke-width="1"/>
+        <path d="M165 228 L515 228" stroke="rgba(0,229,255,0.25)" stroke-width="1" stroke-dasharray="3 6" filter="url(#glow)"/>
+
+        <!-- Speed lines -->
+        <line x1="20" y1="182" x2="72" y2="182" stroke="rgba(0,229,255,0.18)" stroke-width="1.5"/>
+        <line x1="5" y1="194" x2="72" y2="194" stroke="rgba(0,229,255,0.1)" stroke-width="1"/>
+        <line x1="30" y1="206" x2="72" y2="206" stroke="rgba(0,229,255,0.07)" stroke-width="0.8"/>
+
+        <!-- Brand mark -->
+        <polygon points="332,188 339,197 332,206 325,197" fill="none" stroke="rgba(0,229,255,0.4)" stroke-width="1.5" filter="url(#glow)"/>
+        <polygon points="332,192 336,197 332,202 328,197" fill="rgba(0,229,255,0.15)"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-num">750<small>km</small></div>
+    <div class="stat-label">Phạm vi 1 lần sạc</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">3.2<small>s</small></div>
+    <div class="stat-label">0 → 100 km/h</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">250</div>
+    <div class="stat-label">Trạm sạc toàn quốc</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">10<small>yr</small></div>
+    <div class="stat-label">Bảo hành pin</div>
+  </div>
+</div>
+
+<!-- MODELS -->
+<div class="section">
+  <div class="section-tag">Dòng sản phẩm</div>
+  <div class="section-title">CHỌN XE <em>CỦA BẠN</em></div>
+
+  <div class="models-grid">
+    <div class="model-card featured">
+      <div class="model-img model-bg2"><div class="model-img-inner">🚗</div><div class="model-glow"></div></div>
+      <div class="model-info">
+        <span class="model-badge badge-hot">🔥 Bán chạy nhất</span>
+        <div class="model-name">VOLTEX PHANTOM S</div>
+        <div class="model-sub">Sedan hiệu suất cao — Full option</div>
+        <div class="model-specs">
+          <div class="spec"><span class="spec-val">750 km</span><span class="spec-key">Phạm vi</span></div>
+          <div class="spec"><span class="spec-val">3.2s</span><span class="spec-key">0-100</span></div>
+          <div class="spec"><span class="spec-val">560 hp</span><span class="spec-key">Công suất</span></div>
+          <div class="spec"><span class="spec-val">250 km/h</span><span class="spec-key">Vmax</span></div>
+        </div>
+        <div class="model-footer">
+          <div class="price">từ 1,890,000,000đ <span>/ trả thẳng</span></div>
+          <button class="card-btn">Đặt hàng →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="model-card">
+      <div class="model-img model-bg1"><div class="model-img-inner">🚙</div><div class="model-glow"></div></div>
+      <div class="model-info">
+        <span class="model-badge badge-new">✦ Mới 2026</span>
+        <div class="model-name">VOLTEX APEX X</div>
+        <div class="model-sub">SUV gia đình — 7 chỗ</div>
+        <div class="model-specs">
+          <div class="spec"><span class="spec-val">620 km</span><span class="spec-key">Phạm vi</span></div>
+          <div class="spec"><span class="spec-val">5.1s</span><span class="spec-key">0-100</span></div>
+          <div class="spec"><span class="spec-val">400 hp</span><span class="spec-key">Công suất</span></div>
+        </div>
+        <div class="model-footer">
+          <div class="price">từ 1,490,000,000đ</div>
+          <button class="card-btn">Xem thêm →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="model-card">
+      <div class="model-img model-bg3"><div class="model-img-inner" style="font-size:65px">🚘</div><div class="model-glow"></div></div>
+      <div class="model-info">
+        <span class="model-badge badge-eco">🌿 Eco</span>
+        <div class="model-name">VOLTEX MINI E</div>
+        <div class="model-sub">Hatchback đô thị — Tiết kiệm</div>
+        <div class="model-specs">
+          <div class="spec"><span class="spec-val">450 km</span><span class="spec-key">Phạm vi</span></div>
+          <div class="spec"><span class="spec-val">7.8s</span><span class="spec-key">0-100</span></div>
+          <div class="spec"><span class="spec-val">204 hp</span><span class="spec-key">Công suất</span></div>
+        </div>
+        <div class="model-footer">
+          <div class="price">từ 680,000,000đ</div>
+          <button class="card-btn">Khám phá →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="model-card">
+      <div class="model-img model-bg4"><div class="model-img-inner" style="font-size:65px">🛻</div><div class="model-glow"></div></div>
+      <div class="model-info">
+        <span class="model-badge badge-sport">⚡ Sport</span>
+        <div class="model-name">VOLTEX TITAN</div>
+        <div class="model-sub">Pickup off-road — Địa hình</div>
+        <div class="model-specs">
+          <div class="spec"><span class="spec-val">500 km</span><span class="spec-key">Phạm vi</span></div>
+          <div class="spec"><span class="spec-val">4.8s</span><span class="spec-key">0-100</span></div>
+          <div class="spec"><span class="spec-val">800 hp</span><span class="spec-key">Công suất</span></div>
+        </div>
+        <div class="model-footer">
+          <div class="price">từ 1,200,000,000đ</div>
+          <button class="card-btn" style="color:#fb923c;border-color:rgba(255,120,50,0.3)">Xem thêm →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="features-section">
+  <div class="features-inner">
+    <div class="section-tag">Công nghệ</div>
+    <div class="section-title">ĐỔI MỚI <em>TỪNG PHẦN</em></div>
+    <div class="features-grid">
+      <div class="feature-item">
+        <span class="feature-icon">⚡</span>
+        <div class="feature-title">Sạc siêu tốc 350kW</div>
+        <p class="feature-desc">Từ 10% lên 80% pin chỉ trong 18 phút với công nghệ làm mát pin thông minh thế hệ mới.</p>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">🧠</span>
+        <div class="feature-title">AI lái tự động cấp 3</div>
+        <p class="feature-desc">Hệ thống VOLTPILOT với 12 cảm biến, 8 camera AI và chip xử lý 1000 TOPS cho lái bán tự động toàn diện.</p>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">🔋</span>
+        <div class="feature-title">Pin thể rắn thế hệ 4</div>
+        <p class="feature-desc">Mật độ năng lượng cao hơn 40%, an toàn hơn, bền hơn. Không phát nổ trong mọi điều kiện va chạm.</p>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">🌐</span>
+        <div class="feature-title">Kết nối 5G & OTA</div>
+        <p class="feature-desc">Cập nhật phần mềm không dây tự động. Xe ngày càng thông minh hơn mỗi tháng qua mạng 5G.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHARGING -->
+<div class="charging-section">
+  <div class="charge-visual">
+    <div class="charge-circle">
+      <div>
+        <div class="charge-pct">80<small>%</small></div>
+        <div class="charge-status">Đang sạc nhanh</div>
+      </div>
+    </div>
+    <div class="charge-bars">
+      <div class="charge-bar active"></div>
+      <div class="charge-bar active"></div>
+      <div class="charge-bar active"></div>
+      <div class="charge-bar active"></div>
+      <div class="charge-bar active"></div>
+      <div class="charge-bar active"></div>
+      <div class="charge-bar active"></div>
+      <div class="charge-bar active"></div>
+      <div class="charge-bar"></div>
+      <div class="charge-bar"></div>
+    </div>
+    <p style="color:var(--muted);font-size:12px;margin-top:16px">Còn ~12 phút để đầy pin ước tính</p>
+  </div>
+
+  <div>
+    <div class="section-tag">Hạ tầng sạc</div>
+    <div class="section-title" style="margin-bottom:16px">SẠC <em>KHẮP</em><br>MỌI NƠI</div>
+    <p style="color:var(--muted);line-height:1.7;font-size:14px;margin-bottom:0">Mạng lưới 250+ trạm sạc trải dài từ Hà Nội đến Cần Thơ. Luôn tìm được điểm sạc trong 50km từ bất kỳ đâu.</p>
+    <ul class="charge-list">
+      <li><span class="charge-icon">⚡</span><div class="charge-text"><strong>Sạc nhanh DC 350kW</strong><span>18 phút từ 10% → 80% tại trạm siêu tốc</span></div></li>
+      <li><span class="charge-icon">🏠</span><div class="charge-text"><strong>Sạc tại nhà AC 22kW</strong><span>Lắp đặt miễn phí wallbox cho khách hàng đầu tiên</span></div></li>
+      <li><span class="charge-icon">📱</span><div class="charge-text"><strong>App định vị trạm sạc</strong><span>Xem trạm trống theo thời gian thực, đặt chỗ trước</span></div></li>
+      <li><span class="charge-icon">💳</span><div class="charge-text"><strong>Thanh toán tự động</strong><span>Kết nối ví điện tử, không cần thẻ hay tiền mặt</span></div></li>
+    </ul>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrapper">
+  <div class="cta">
+    <div class="cta-text">
+      <h2>SẴN SÀNG LÊN ĐƯỜNG?</h2>
+      <p>Đặt lái thử miễn phí tại đại lý gần bạn. Không áp lực, không cam kết.</p>
+    </div>
+    <div class="cta-actions">
+      <button class="btn-primary">Đặt lái thử ngay</button>
+      <button class="btn-secondary">Tư vấn miễn phí</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo" style="font-size:20px">VOLT<span>EX</span></div>
+  <div>© 2026 VoltEx Vietnam. All rights reserved.</div>
+  <div class="footer-links">
+    <a href="#">Chính sách</a>
+    <a href="#">Liên hệ</a>
+    <a href="#">Tuyển dụng</a>
+  </div>
+</footer>
+
+<script>
+  function toggleMenu(btn) {
+    const menu = document.getElementById('mobileMenu');
+    const isOpen = menu.classList.contains('open');
+    if (isOpen) {
+      menu.classList.remove('open');
+      setTimeout(() => { if (!menu.classList.contains('open')) menu.style.display = 'none'; }, 350);
+    } else {
+      menu.style.display = 'flex';
+      requestAnimationFrame(() => menu.classList.add('open'));
+    }
+    // Animate hamburger → X
+    const spans = btn.querySelectorAll('span');
+    spans[0].style.transform = isOpen ? '' : 'translateY(7px) rotate(45deg)';
+    spans[1].style.opacity = isOpen ? '1' : '0';
+    spans[2].style.transform = isOpen ? '' : 'translateY(-7px) rotate(-45deg)';
+  }
+
+  // Close menu on link click
+  document.querySelectorAll('#mobileMenu a, #mobileMenu button').forEach(el => {
+    el.addEventListener('click', () => {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.remove('open');
+      setTimeout(() => { menu.style.display = 'none'; }, 350);
+    });
+  });
+</script>
+
+</body>
+</html>
